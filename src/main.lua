@@ -901,6 +901,16 @@ if ide:IsValidProperty(ide:GetMainFrame(), "EnableFullScreenView") then
   ide:GetMainFrame():EnableFullScreenView()
 end
 
+wx.wxGetApp().MacOpenFiles = function(files)
+  for _, file in ipairs(files) do
+    if wx.wxDirExists(file) then
+      ProjectUpdateProjectDir(file)
+    elseif not ActivateFile(file) then
+      ide:Print(("Can't open file '%s': %s"):format(file, wx.wxSysErrorMsg()))
+    end
+  end
+end
+
 wx.wxGetApp():MainLoop()
 
 -- There are several reasons for this call:
